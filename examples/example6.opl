@@ -1,0 +1,8 @@
+var x = 10;
+
+{
+    var x = 99; # this x is scoped to this block
+    print x;    # prints 99
+}
+
+print x; # prints 10, outer x is untouched

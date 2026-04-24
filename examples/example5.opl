@@ -1,0 +1,10 @@
+var hungry = true;
+var has_food = false;
+
+if (hungry and has_food) {
+    print "time to eat";
+} else if (hungry and !has_food) {
+    print "need to go get food";
+} else {
+    print "all good";
+}
