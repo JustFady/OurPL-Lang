@@ -22,7 +22,30 @@ class Lexer {
     static {
         keywords = new HashMap<>();
 
-        // remove keywords before here
+        keywords.put("(", LEFT_PAREN);
+        keywords.put(")", RIGHT_PAREN);
+        keywords.put("}", RIGHT_BRACE);
+        keywords.put("}", LEFT_BRACE);
+
+        keywords.put(",", COMMA);
+        keywords.put(".", DOT);
+        keywords.put("+", PLUS);
+        keywords.put("-", MINUS);
+        keywords.put("*", STAR);
+        keywords.put("/", SLASH);
+        keywords.put(";", SEMICOLON);
+
+        keywords.put("!", BANG);
+        keywords.put("!=", BANG_EQUAL);
+        keywords.put(">", GREATER);
+        keywords.put(">=", GREATER_EQUAL);
+        keywords.put("<", LESS);
+        keywords.put("<=", LESS_EQUAL);
+        keywords.put("=", EQUAL);
+        keywords.put("==", EQUAL_EQUAL);
+
+
+        //remove keywords before here
         keywords.put("and", AND);
         keywords.put("else", ELSE);
         keywords.put("false", FALSE);
@@ -40,16 +63,17 @@ class Lexer {
         keywords.put("while", WHILE);
 
         keywords.put("", EOF);
-
+        
+        
     }
 
     /*- `scanToken()` must call `string()`,
      `number()`, and `identifier()` when needed. */
 
     List<Token> scanTokens() {
-        // while not at the end of stream
+        //while not at the end of stream
         while (!isAtEnd()) {
-            // set start to current and begin reading in tokens recursively
+            //set start to current and begin reading in tokens recursively
             start = current;
             scanToken();
         }
@@ -68,28 +92,24 @@ class Lexer {
     }
 
     private boolean match(char expected) {
-        if (isAtEnd())
-            return false;
-        if (source.charAt(current) != expected)
-            return false;
+        if (isAtEnd()) return false;
+        if (source.charAt(current) != expected) return false;
         current++;
         return true;
     }
 
     private char peek() {
-        if (isAtEnd())
-            return '\0';
+        if (isAtEnd()) return '\0';
         return source.charAt(current);
     }
 
     private char peekNext() {
-        if (current + 1 >= source.length())
-            return '\0';
-        // charAt receives specific index within a string
+        if (current + 1 >= source.length()) return '\0';
+        //charAt receives specific index within a string
         return source.charAt(current + 1);
     }
 
-    private boolean isDigit(char c) {
+     private boolean isDigit(char c) {
         return c >= '0' && c <= '9';
     }
 
@@ -102,7 +122,7 @@ class Lexer {
     }
 
     private void addToken(TokenType type) {
-        addToken(type, null);
+        addToken(type,null);
     }
 
     private void addToken(TokenType type, Object literal) {
@@ -110,10 +130,10 @@ class Lexer {
         tokens.add(new Token(type, text, literal, line));
     }
 
-    private void string() {
-        // continue until we reach the end
+private void string() {
+    // continue until we reach the end
         while (peek() != '"' && !isAtEnd()) {
-            if (peek() == '\n')
+            if (peek() == '\n') 
                 line++;
             advance();
         }
@@ -123,102 +143,71 @@ class Lexer {
             return;
         }
 
-        // for the closing " too
+            // for the closing " too 
         advance();
-        // take whats inside the quotes
+        //take whats inside the quotes
         String value = source.substring(start + 1, current - 1);
         addToken(STRING, value);
     }
 
     private void number() {
-        // while theres a number keep parsing
-        while (isDigit(peek()))
+        //while theres a number keep parsing
+        while (isDigit(peek())) 
             advance();
 
-        // same thing here but keep parsing after taking dot
+        // same thing here but keep parsing after taking dot 
         if (peek() == '.' && isDigit(peekNext())) {
             advance();
-            while (isDigit(peek()))
-                advance();
+            while (isDigit(peek())) advance();
         }
-        // parse string into number
+            //parse string into number
         addToken(NUMBER, Double.parseDouble(source.substring(start, current)));
     }
 
     private void identifier() {
-
-        while (isAlphaNumeric(peek()))
+        
+        while (isAlphaNumeric(peek())) 
             advance();
 
-        // extract scanned word
+        //extract scanned word
         String text = source.substring(start, current);
-        // cbeck if the keyword exists
+        //cbeck if the keyword exists
         TokenType type = keywords.get(text);
-
+        
         if (type == null) {
             type = IDENTIFIER;
         }
-
+        
         addToken(type);
     }
 
-    private void scanToken() {
-        // consume and advance
-        char c = advance();
+private void scanToken() {
+        //consume and advance
+    char c = advance();
 
         switch (c) {
-            case '(':
-                addToken(LEFT_PAREN);
-                break;
-            case ')':
-                addToken(RIGHT_PAREN);
-                break;
-            case '{':
-                addToken(LEFT_BRACE);
-                break;
-            case '}':
-                addToken(RIGHT_BRACE);
-                break;
-            case ',':
-                addToken(COMMA);
-                break;
-            case '.':
-                addToken(DOT);
-                break;
-            case '+':
-                addToken(PLUS);
-                break;
-            case '-':
-                addToken(MINUS);
-                break;
-            case '*':
-                addToken(STAR);
-                break;
-            case '/':
-                addToken(SLASH);
-                break;
-            case ';':
-                addToken(SEMICOLON);
-                break;
-            case '!':
-                addToken(match('=') ? BANG_EQUAL : BANG);
-                break;
-            case '=':
-                addToken(match('=') ? EQUAL_EQUAL : EQUAL);
-                break;
-            case '<':
-                addToken(match('=') ? LESS_EQUAL : LESS);
-                break;
-            case '>':
-                addToken(match('=') ? GREATER_EQUAL : GREATER);
-                break;
+            case '(': addToken(LEFT_PAREN); break;
+            case ')': addToken(RIGHT_PAREN); break;
+            case '{': addToken(LEFT_BRACE); break;
+            case '}': addToken(RIGHT_BRACE); break;
+            case ',': addToken(COMMA); break;
+            case '.': addToken(DOT); break;
+            case '+': addToken(PLUS); break;
+            case '-': addToken(MINUS); break;
+            case '*': addToken(STAR); break;
+            case '/': addToken(SLASH); break;
+            case ';': addToken(SEMICOLON); break;
+            case '!': addToken(match('=') ? BANG_EQUAL : BANG); break;
+            case '=': addToken(match('=') ? EQUAL_EQUAL : EQUAL); break;
+            case '<': addToken(match('=') ? LESS_EQUAL : LESS); break;
+            case '>': addToken(match('=') ? GREATER_EQUAL : GREATER); break;
             case '#':
                 while (peek() != '\n' && !isAtEnd()) {
                     advance();
                 }
                 break;
 
-            // whitespace
+                // whitespace
             case ' ':
             case '\r':
             case '\t':
@@ -230,6 +219,7 @@ class Lexer {
             case '"':
                 string();
                 break;
+
 
             default:
                 if (isDigit(c)) {

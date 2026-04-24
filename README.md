@@ -2,7 +2,10 @@
 
 Small language I built from scratch — lexer, parser, and interpreter in Java.
 
-Needs Java 21 and [Maven](https://maven.apache.org/install.html).
+## dependencies
+
+- [Java 21](https://www.oracle.com/java/technologies/downloads/#java21)
+- [Maven](https://maven.apache.org/install.html)
 
 ## run
 
