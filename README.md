@@ -24,3 +24,19 @@ mvn clean compile exec:java -Dexec.args="examples/example1.opl"
 ```bash
 mvn test
 ```
+
+## what's in it
+
+- variables, strings, numbers, nil
+- arithmetic, comparison, and logical operators
+- short-circuit evaluation (`and`, `or`)
+- `if` / `else`, `while`, `for`
+- block scoping
+- `print`
+
+## what's next
+
+- classes and structs
+- arrays
+- closures
+- string interpolation
