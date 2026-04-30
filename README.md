@@ -33,10 +33,11 @@ mvn test
 - `if` / `else`, `while`, `for`
 - block scoping
 - `print`
+- functions and closures
+- `return` statements
 
 ## what's next
 
 - classes and structs
 - arrays
-- closures
 - string interpolation
