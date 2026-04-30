@@ -6,7 +6,7 @@ class OurPLFunction implements OurPLCallable {
     private final Stmt.Function declaration;
     private final Environment closure;
 
-    OurPLFunction(Stmt.Function declaration, Environment closure) {
+    public OurPLFunction(Stmt.Function declaration, Environment closure) {
         this.closure = closure;
         this.declaration = declaration;
     }
