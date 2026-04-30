@@ -282,6 +282,44 @@ class Parser2MiniTest {
         assertTrue(out.stderr.isEmpty());
     }
 
+    @Test
+    void parsesAndExecutesFunctionDeclarationAndCall() {
+        EvalOutcome out = interpret("fun sayHi(first, last) { print \"Hi, \" + first + \" \" + last; } sayHi(\"Dear\", \"Reader\");");
+        assertFalse(OurPL.hadError);
+        assertFalse(OurPL.hadRuntimeError);
+        assertEquals("Hi, Dear Reader", out.stdout);
+    }
+
+    @Test
+    void executesReturnStatement() {
+        EvalOutcome out = interpret("fun add(a, b) { return a + b; } print add(1, 2);");
+        assertFalse(OurPL.hadError);
+        assertFalse(OurPL.hadRuntimeError);
+        assertEquals("3", out.stdout);
+    }
+
+    @Test
+    void closuresCaptureLocalVariables() {
+        EvalOutcome out = interpret(
+            "fun makeCounter() { " +
+            "  var i = 0; " +
+            "  fun count() { i = i + 1; print i; } " +
+            "  return count; " +
+            "} " +
+            "var counter = makeCounter(); " +
+            "counter(); counter();");
+        assertFalse(OurPL.hadError);
+        assertFalse(OurPL.hadRuntimeError);
+        assertEquals("1\n2", out.stdout);
+    }
+
+    @Test
+    void reportsArityMismatchError() {
+        EvalOutcome out = interpret("fun f(a) {} f(1, 2);");
+        assertTrue(OurPL.hadRuntimeError);
+        assertTrue(out.stderr.contains("Expected 1 arguments but got 2."));
+    }
+
     private static final class ParseOutcome {
         final List<Stmt> statements;
         final String stderr;
